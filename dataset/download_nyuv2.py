@@ -24,7 +24,6 @@ def extract_ds(image_db):
     data_dir = PATH_TO_NYU/'data'/'rgb'
     gt_dir = PATH_TO_NYU/'data'/'depth'
 
-    # if not(os.path.exists(data_dir)):
     if not data_dir.exists():
         data_dir.mkdir(parents=True)
         print('Extracting RGB...')
@@ -39,7 +38,6 @@ def extract_ds(image_db):
     else:
         print("RGB Directory exists. Not extracting")
     
-    # if not(os.path.exists(gt_dir)):
     if not gt_dir.exists():
         gt_dir.mkdir(parents=True)
         print('Extracting Normalized Depths...')
