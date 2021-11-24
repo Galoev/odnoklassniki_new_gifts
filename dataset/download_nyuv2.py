@@ -8,7 +8,10 @@ from constants import PATH_TO_NYU
 
 def read_db():
     # data path
-    path_to_depth = PATH_TO_NYU/'nyu_depth_v2_labeled.mat'
+    NYU_V2_FILE_NAME = 'nyu_depth_v2_labeled.mat'
+    path_to_depth = PATH_TO_NYU/NYU_V2_FILE_NAME
+    if not path_to_depth.is_file():
+        raise FileNotFoundError(f"File: {NYU_V2_FILE_NAME} doesn't exist")
 
     # read mat file
     image_db = h5py.File(path_to_depth)
