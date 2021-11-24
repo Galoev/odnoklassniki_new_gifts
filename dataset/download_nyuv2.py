@@ -4,6 +4,8 @@ import cv2
 from tqdm import tqdm
 from pathlib import Path
 from constants import PATH_TO_NYU
+from constants import NYU_V2_URL
+import wget
 
 
 def read_db():
@@ -11,7 +13,9 @@ def read_db():
     NYU_V2_FILE_NAME = 'nyu_depth_v2_labeled.mat'
     path_to_depth = PATH_TO_NYU/NYU_V2_FILE_NAME
     if not path_to_depth.is_file():
-        raise FileNotFoundError(f"File: {NYU_V2_FILE_NAME} doesn't exist")
+        print(f"File: {NYU_V2_FILE_NAME} doesn't exist")
+        print(f"Donload {NYU_V2_URL} from {NYU_V2_URL}")
+        wget.download(NYU_V2_URL, str(path_to_depth))
 
     # read mat file
     image_db = h5py.File(path_to_depth)
