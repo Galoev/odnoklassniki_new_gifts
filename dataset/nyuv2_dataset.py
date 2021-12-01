@@ -1,18 +1,62 @@
-
+import h5py
+import torch
 import numpy as np
 from path import Path
-import imageio as iio
-from torch.utils.data import Dataset
+from torch.utils.data import Dataset, DataLoader
+from PIL import Image
 from constants import PATH_TO_NYU
+from constants import RAW_NYU_V2_FILE_NAME
 
 
-class NYUv2Dataset(Dataset):
-    def __init__(self, root=PATH_TO_NYU, seed=None, train=True):
+class DatasetNYUv2(Dataset):
+    def __init__(self, root: Path=PATH_TO_NYU, seed: int=43, train: bool=True):
         np.random.seed(seed)
-        self.root = Path(root)
+        
+        self.root = root
+        self.train = train 
+        self.nyudepthv2 = RAW_NYU_V2_FILE_NAME.split(sep='.')[0]
+        self.path_to_nyu_dir = PATH_TO_NYU/self.nyudepthv2
+
+        TRAIN_DIR_NAME = 'train'
+        VAL_DIR_NAME = 'val'
+
+        if self.train:
+            self.path_to_data = self.path_to_nyu_dir / TRAIN_DIR_NAME            
+        else:
+            self.path_to_data = self.path_to_nyu_dir / VAL_DIR_NAME
+
+        self.paths_to_data = list(self.path_to_data.glob("*.h5"))
+        self.data_len = len(self.paths_to_data)
 
     def __getitem__(self, index):
-        rgb = iio.imread(self.root)
-        depth = iio.imread(self.root)
+        path_to_data = self.paths_to_data[index]
+        h5_data = h5py.File(path_to_data)
 
-        return rgb, depth
+        rgb_img = np.array(h5_data['rgb'][:])
+        rgb_img = rgb_img.transpose((1, 2, 0))
+        rgb_img = torch.tensor(rgb_img)
+        
+        depth_img = np.array(h5_data['depth'][:])
+        depth_img = torch.tensor(depth_img)
+        depth_img /= 10
+        depth_img *= 255
+        
+        return rgb_img, depth_img
+
+    def __len__(self):
+        return self.data_len
+
+if __name__ == "__main__":
+    test_data = DatasetNYUv2(train=False)
+    test_dataloader = DataLoader(test_data, batch_size=4, shuffle=True)
+    test_features, test_labels = next(iter(test_dataloader))
+    rgb_img, depth_img = test_features[0], test_labels[0]
+
+    rgb_img = rgb_img.numpy()
+    depth_img = depth_img.numpy()
+
+    pil_rgb_img = Image.fromarray(rgb_img, mode="RGB")
+    pil_rgb_img.show("RGB")
+
+    pil_depth_img = Image.fromarray(depth_img)
+    pil_depth_img.show("depth")
