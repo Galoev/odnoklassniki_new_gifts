@@ -38,8 +38,9 @@ class DatasetNYUv2(Dataset):
         
         depth_img = np.array(h5_data['depth'][:])
         depth_img = torch.tensor(depth_img)
-        depth_img /= 10
-        depth_img *= 255
+        depth_img = torch.clamp(depth_img, min=0, max=1)
+        # depth_img /= 10
+        # depth_img *= 255
         
         return rgb_img, depth_img
 
