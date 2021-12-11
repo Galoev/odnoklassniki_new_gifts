@@ -58,7 +58,7 @@ def train_net(  net,
                 learning_rate = 0.0001,
                 val_percent: float = 0.1):
     saveDir = PATH_TO_NYU / "saveDir"
-    dataset = DatasetNYUv2(root=dataset_path)
+    dataset = DatasetNYUv2(path_to_dataset=dataset_path)
     
     n_val = int(len(dataset) * val_percent)
     n_train = len(dataset) - n_val
