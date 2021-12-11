@@ -9,13 +9,13 @@ from .constants import RAW_NYU_V2_FILE_NAME
 
 
 class DatasetNYUv2(Dataset):
-    def __init__(self, root: Path=PATH_TO_NYU, seed: int=43, train: bool=True):
+    def __init__(self, path_to_dataset: Path=PATH_TO_NYU, seed: int=43, train: bool=True):
         np.random.seed(seed)
         
-        self.root = root
+        self.root = path_to_dataset
         self.train = train 
         self.nyudepthv2 = RAW_NYU_V2_FILE_NAME.split(sep='.')[0]
-        self.path_to_nyu_dir = PATH_TO_NYU/self.nyudepthv2
+        self.path_to_nyu_dir = self.root/self.nyudepthv2
 
         TRAIN_DIR_NAME = 'train'
         VAL_DIR_NAME = 'val'
