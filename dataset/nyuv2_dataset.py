@@ -1,7 +1,7 @@
 import h5py
 import torch
 import numpy as np
-from path import Path
+from pathlib import Path
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 from .constants import PATH_TO_NYU
@@ -12,7 +12,7 @@ class DatasetNYUv2(Dataset):
     def __init__(self, path_to_dataset: Path=PATH_TO_NYU, seed: int=43, train: bool=True):
         np.random.seed(seed)
         
-        self.root = path_to_dataset
+        self.root = Path(path_to_dataset)
         self.train = train 
         self.nyudepthv2 = RAW_NYU_V2_FILE_NAME.split(sep='.')[0]
         self.path_to_nyu_dir = self.root/self.nyudepthv2

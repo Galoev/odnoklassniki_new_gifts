@@ -3,8 +3,8 @@ import h5py
 import cv2
 from tqdm import tqdm
 from pathlib import Path
-from constants import PATH_TO_NYU
-from constants import NYU_V2_URL
+from .constants import PATH_TO_NYU
+from .constants import NYU_V2_URL
 import wget
 
 

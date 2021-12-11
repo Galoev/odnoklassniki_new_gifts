@@ -2,9 +2,10 @@ import wget
 import tarfile
 from pathlib import Path
 from tqdm import tqdm
-from constants import RAW_NYU_V2_URL
-from constants import RAW_NYU_V2_FILE_NAME
-from constants import PATH_TO_NYU
+from .constants import RAW_NYU_V2_URL
+from .constants import RAW_NYU_V2_FILE_NAME
+from .constants import PATH_TO_NYU
+from argparse import ArgumentParser, Namespace
 
 
 class NYU2:
@@ -81,7 +82,11 @@ class NYU2:
         for file in path_to_dir.glob('*.h5'):
             file.rename(target / f"{path_name}_{file.name}")
             
+def parse_args() -> Namespace:
+    parser = ArgumentParser(description='NYUv2 downloader')
 
+    args = parser.parse_args()
+    return args
 
 if __name__ == '__main__':
     dataset = NYU2()
