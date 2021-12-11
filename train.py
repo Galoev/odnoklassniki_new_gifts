@@ -127,6 +127,7 @@ if __name__ == "__main__":
     try:
         train_net(net=net,
                   device=device,
+                  dataset_path = args.dataset_path,
                   epochs=args.max_epochs,
                   batch_size=args.bs,
                   learning_rate=args.lr,
