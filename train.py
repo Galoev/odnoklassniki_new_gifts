@@ -1,4 +1,4 @@
-from dataset import DatasetNYUv2
+from dataset.nyuv2_dataset import DatasetNYUv2
 from unet_model import UNet
 from torch.utils.data import DataLoader, random_split
 import torch
@@ -101,6 +101,7 @@ def train_net(  net,
 
 
 if __name__ == "__main__":
+    print("Start Train")
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     net = UNet(in_channel=3, out_channel=1)
     net.to(device=device)

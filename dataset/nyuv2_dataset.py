@@ -4,8 +4,8 @@ import numpy as np
 from path import Path
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
-from constants import PATH_TO_NYU
-from constants import RAW_NYU_V2_FILE_NAME
+from .constants import PATH_TO_NYU
+from .constants import RAW_NYU_V2_FILE_NAME
 
 
 class DatasetNYUv2(Dataset):

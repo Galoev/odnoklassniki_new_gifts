@@ -1,1 +1,0 @@
-from nyuv2_dataset import DatasetNYUv2
