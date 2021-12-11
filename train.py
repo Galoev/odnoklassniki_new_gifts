@@ -10,6 +10,10 @@ from torch.autograd import Variable
 import numpy as np
 from dataset.constants import PATH_TO_NYU
 import math
+from argparse import ArgumentParser, Namespace
+from path import Path
+
+NUM_EPOCHS = 20
 
 class GradLoss(nn.Module):
     def __init__(self):
@@ -48,12 +52,13 @@ def imgrad_yx(img):
 
 def train_net(  net,
                 device,
+                dataset_path: Path = PATH_TO_NYU,
                 epochs: int = 5, 
                 batch_size: int = 32,
                 learning_rate = 0.0001,
                 val_percent: float = 0.1):
     saveDir = PATH_TO_NYU / "saveDir"
-    dataset = DatasetNYUv2()
+    dataset = DatasetNYUv2(root=dataset_path)
     
     n_val = int(len(dataset) * val_percent)
     n_train = len(dataset) - n_val
@@ -100,8 +105,21 @@ def train_net(  net,
         print(f"[epoch {epoch}] RMSE_log: {math.sqrt(eval_loss/count)}")
 
 
+def parse_args() -> Namespace:
+    parser = ArgumentParser(description='Single image depth estimation')
+
+    parser.add_argument('--epochs', dest='max_epochs', help='number of epochs to train', default=NUM_EPOCHS, type=int)
+    parser.add_argument('--bs', dest='bs', help='batch_size', default=32, type=int)
+    parser.add_argument("--dataset_path", dest="dataset_path", help="Path to dataset", default=PATH_TO_NYU, type=str)
+    parser.add_argument('--output_dir', dest='output_dir', help='output directory', default=PATH_TO_NYU, type=str)
+    parser.add_argument('--lr', dest='lr', help='learning rate', default=1e-3, type=float)
+
+    args = parser.parse_args()
+    return args
+
 if __name__ == "__main__":
-    print("Start Train")
+    args = parse_args()
+    
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     net = UNet(in_channel=3, out_channel=1)
     net.to(device=device)
@@ -109,9 +127,9 @@ if __name__ == "__main__":
     try:
         train_net(net=net,
                   device=device,
-                  epochs=20,
-                  batch_size=32,
-                  learning_rate=0.0001,
+                  epochs=args.max_epochs,
+                  batch_size=args.bs,
+                  learning_rate=args.lr,
                   val_percent= 0.1)
     except KeyboardInterrupt:
         torch.save(net.state_dict(), 'INTERRUPTED.pth')
