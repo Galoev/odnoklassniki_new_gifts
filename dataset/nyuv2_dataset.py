@@ -33,11 +33,13 @@ class DatasetNYUv2(Dataset):
         h5_data = h5py.File(path_to_data)
 
         rgb_img = np.array(h5_data['rgb'][:])
-        rgb_img = rgb_img.transpose((1, 2, 0))
+        # rgb_img = rgb_img.transpose((1, 2, 0))
         rgb_img = torch.tensor(rgb_img)
+        rgb_img = rgb_img.float()
         
         depth_img = np.array(h5_data['depth'][:])
         depth_img = torch.tensor(depth_img)
+        depth_img = depth_img.float()
         depth_img = torch.clamp(depth_img, min=0, max=1)
         # depth_img /= 10
         # depth_img *= 255
