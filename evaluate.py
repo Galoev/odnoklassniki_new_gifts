@@ -48,14 +48,14 @@ model.eval()
 
 from data import NYUDataset, input_for_plot_transforms, rgb_data_transforms, depth_data_transforms
 
-test_loader = torch.utils.data.DataLoader(NYUDataset( '/Volumes/TMP_Storage/Datasets/nyu_depth_v2_labeled.mat',
+test_loader = torch.utils.data.DataLoader(NYUDataset(args.data + 'nyu_depth_v2_labeled.mat',
                                                        'test', 
                                                         rgb_transform = rgb_data_transforms, 
                                                         depth_transform = depth_data_transforms), 
                                             batch_size = args.batch_size, 
                                             shuffle = False, num_workers = 50)
 
-input_for_plot_loader = torch.utils.data.DataLoader(NYUDataset( '/Volumes/TMP_Storage/Datasets/nyu_depth_v2_labeled.mat', 
+input_for_plot_loader = torch.utils.data.DataLoader(NYUDataset(args.data + 'nyu_depth_v2_labeled.mat', 
                                                                 'test', 
                                                                 rgb_transform = input_for_plot_transforms, 
                                                                 depth_transform = depth_data_transforms), 

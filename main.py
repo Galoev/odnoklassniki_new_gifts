@@ -41,14 +41,14 @@ args = parser.parse_args()
 
 from data import NYUDataset, rgb_data_transforms, depth_data_transforms, input_for_plot_transforms, output_height, output_width
 
-train_loader = torch.utils.data.DataLoader(NYUDataset( '/Volumes/TMP_Storage/Datasets/nyu_depth_v2_labeled.mat', 
+train_loader = torch.utils.data.DataLoader(NYUDataset(args.data + 'nyu_depth_v2_labeled.mat', 
                                                        'training', 
                                                         rgb_transform = rgb_data_transforms, 
                                                         depth_transform = depth_data_transforms), 
                                             batch_size = args.batch_size, 
                                             shuffle = True, num_workers = 5)
 
-val_loader = torch.utils.data.DataLoader(NYUDataset( '/Volumes/TMP_Storage/Datasets/nyu_depth_v2_labeled.mat',
+val_loader = torch.utils.data.DataLoader(NYUDataset(args.data + 'nyu_depth_v2_labeled.mat',
                                                        'validation', 
                                                         rgb_transform = rgb_data_transforms, 
                                                         depth_transform = depth_data_transforms), 
