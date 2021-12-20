@@ -56,8 +56,7 @@ val_loader = torch.utils.data.DataLoader(NYUDataset(args.data + 'nyu_depth_v2_la
                                             shuffle = False, num_workers = 5)
 
 
-# from tiny_unet import UNet
-from model import UNet
+from unet import UNet
 model = UNet()
 model.cuda()
 
