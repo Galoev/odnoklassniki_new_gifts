@@ -64,7 +64,7 @@ class NYU2:
                 print(f"Files from the directory {dir} have already been moved")
 
     def __move_for_one_dir(self, path_to_dir: Path):
-        for dir in tqdm(path_to_dir.glob("*")):
+        for dir in tqdm(path_to_dir.glob("*"), total=280):
             if dir.is_dir():
                 self.__move_higher(dir)
     
