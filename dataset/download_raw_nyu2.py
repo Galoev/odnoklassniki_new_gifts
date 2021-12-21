@@ -2,11 +2,11 @@ import wget
 import tarfile
 from pathlib import Path
 from tqdm import tqdm
-from .constants import RAW_NYU_V2_URL
-from .constants import RAW_NYU_V2_FILE_NAME
-from .constants import PATH_TO_NYU
 from argparse import ArgumentParser, Namespace
 
+RAW_NYU_V2_URL = "http://datasets.lids.mit.edu/fastdepth/data/nyudepthv2.tar.gz"
+PATH_TO_NYU = Path("/Volumes/TMP_Storage/Datasets/NYUv2/datasets.lids.mit.edu")
+RAW_NYU_V2_FILE_NAME = "nyudepthv2.tar.gz"
 
 class NYU2:
     def __init__(self, path_to_nyu=PATH_TO_NYU, raw_nyu_archive_name = "nyudepthv2.tar.gz"):
@@ -84,7 +84,7 @@ class NYU2:
             
 def parse_args() -> Namespace:
     parser = ArgumentParser(description='NYUv2 downloader')
-    parser.add_argument('--data', type=str, metavar='D',
+    parser.add_argument('--data', type=str, default=PATH_TO_NYU, metavar='D',
                      help="folder where NYUv2 is located")
     args = parser.parse_args()
     return args
