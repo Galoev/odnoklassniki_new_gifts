@@ -9,6 +9,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import ImageGrid
+from torch.utils.data import DataLoader, random_split
 
 from torch.autograd import Variable
 import pdb
@@ -41,24 +42,34 @@ parser.add_argument('--suffix', type=str, default='', metavar='D',
                      help='suffix for the filename of models and output files')
 parser.add_argument('--model_type', type=str, default='unet',
                     help='In which folder have you saved the models')
+parser.add_argument('--val_percent', type=float, default=0.2,
+                     help='Percentage of dataset to use for validation 0-1')
 args = parser.parse_args()
 
 # from data import NYUDataset, rgb_data_transforms, depth_data_transforms, input_for_plot_transforms, output_height, output_width
+# train_loader = torch.utils.data.DataLoader(NYUDataset(args.data + 'nyu_depth_v2_labeled.mat', 
+#                                                        'training', 
+#                                                         rgb_transform = rgb_data_transforms, 
+#                                                         depth_transform = depth_data_transforms), 
+#                                             batch_size = args.batch_size, 
+#                                             shuffle = True, num_workers = 5)
+
+# val_loader = torch.utils.data.DataLoader(NYUDataset(args.data + 'nyu_depth_v2_labeled.mat',
+#                                                        'validation', 
+#                                                         rgb_transform = rgb_data_transforms, 
+#                                                         depth_transform = depth_data_transforms), 
+#                                             batch_size = args.batch_size, 
+#                                             shuffle = False, num_workers = 5)
+
 from dataset.nyuv2_dataset import DatasetNYUv2
 
-train_loader = torch.utils.data.DataLoader(NYUDataset(args.data + 'nyu_depth_v2_labeled.mat', 
-                                                       'training', 
-                                                        rgb_transform = rgb_data_transforms, 
-                                                        depth_transform = depth_data_transforms), 
-                                            batch_size = args.batch_size, 
-                                            shuffle = True, num_workers = 5)
+dataset = DatasetNYUv2(path_to_dataset=args.data)
+n_val = int(len(dataset) * args.val_percent)
+n_train = len(dataset) - n_val
+train_set, val_set = random_split(dataset, [n_train, n_val], generator=torch.Generator().manual_seed(42))
 
-val_loader = torch.utils.data.DataLoader(NYUDataset(args.data + 'nyu_depth_v2_labeled.mat',
-                                                       'validation', 
-                                                        rgb_transform = rgb_data_transforms, 
-                                                        depth_transform = depth_data_transforms), 
-                                            batch_size = args.batch_size, 
-                                            shuffle = False, num_workers = 5)
+train_loader = DataLoader(train_set.dataset, batch_size = args.batch_size, shuffle = True)
+val_loader = DataLoader(val_set, batch_size = args.batch_size, shuffle = False)
 
 
 if args.model_type == "unet":
