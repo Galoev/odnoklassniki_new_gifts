@@ -39,6 +39,8 @@ parser.add_argument('--log-interval', type=int, default=50, metavar='N',
                      help='how many batches to wait before logging training status')
 parser.add_argument('--suffix', type=str, default='', metavar='D',
                      help='suffix for the filename of models and output files')
+parser.add_argument('--model_type', type=str, default='unet',
+                    help='In which folder have you saved the models')
 args = parser.parse_args()
 
 from data import NYUDataset, rgb_data_transforms, depth_data_transforms, input_for_plot_transforms, output_height, output_width
@@ -58,7 +60,16 @@ val_loader = torch.utils.data.DataLoader(NYUDataset(args.data + 'nyu_depth_v2_la
                                             shuffle = False, num_workers = 5)
 
 
-from unet import UNet
+if args.model_type == "unet":
+  from unet import UNet
+  print("Import unet")
+elif args.model_type == "tiny_unet":
+  from tiny_unet import UNet
+  print("Import tiny_unet")
+else:
+  print("Error. Unknown type model")
+  exit(0)
+
 model = UNet()
 model.cuda()
 
