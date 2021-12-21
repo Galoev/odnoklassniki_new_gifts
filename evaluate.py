@@ -28,7 +28,7 @@ parser.add_argument('--model_no', type=int, default = 1900, metavar='N',
                     help='Which model no to evaluate (default: 1(first model))')
 parser.add_argument('--batch-size', type = int, default = 8, metavar = 'N',
                     help='input batch size for training (default: 8)')
-parser.add_argument('--plots_folder', type = int, default = 8, metavar = 'N',
+parser.add_argument('--plots_folder', type=str, metavar='F',
                     help='In which folder save plots')
 
 args = parser.parse_args()
@@ -91,7 +91,7 @@ for batch_idx, data in enumerate(test_loader):
     F = plt.figure(1, (30, 60))
     F.subplots_adjust(left=0.05, right=0.95)
     plot_grid(F, plot_input.cpu(), output.cpu(), actual_output.cpu(), depth_dim[0])
-    plt.savefig(args.plots_folder + args.model_folder + "_" + str(args.model_no) + "_" + str(batch_idx) + ".jpg")
+    plt.savefig(args.plots_folder + args.model_name + "_" + str(args.model_no) + "_" + str(batch_idx) + ".jpg")
     plt.show()
     #batch_idx = batch_idx + 1
     #if batch_idx == 1: break
