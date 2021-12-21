@@ -6,7 +6,7 @@ from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 
 class DatasetNYUv2(Dataset):
-    PATH_TO_NYU = Path("/Volumes/TMP_Storage/Datasets/NYUv2/datasets.lids.mit.edu")
+    PATH_TO_NYU = Path("/Volumes/TMP_Storage/Datasets/NYUv2/datasets.lids.mit.edu/_nyudepthv2")
 
     def __init__(self, path_to_dataset: Path=PATH_TO_NYU, seed: int=42, train: bool=True):
         np.random.seed(seed)
@@ -22,11 +22,14 @@ class DatasetNYUv2(Dataset):
         else:
             self.path_to_data = self.path_to_nyu_dir / VAL_DIR_NAME
 
-        self.paths_to_data = list(self.path_to_data.glob("*.h5"))
-        self.data_len = len(self.paths_to_data)
+        self.paths_to_h5 = []
+        self.__init_paths_to_h5()
+        self.data_len = len(self.paths_to_h5)
+        # self.paths_to_data = list(self.path_to_data.glob("*.h5"))
+        # self.data_len = len(self.paths_to_data)
 
     def __getitem__(self, index):
-        path_to_data = self.paths_to_data[index]
+        path_to_data = self.paths_to_h5[index]
         h5_data = h5py.File(path_to_data)
 
         rgb_img = np.array(h5_data['rgb'][:])
@@ -45,6 +48,13 @@ class DatasetNYUv2(Dataset):
 
     def __len__(self):
         return self.data_len
+
+    def __init_paths_to_h5(self):
+        for dir in self.path_to_data.glob("*"):
+            if dir.is_dir():
+                for file in dir.glob('*.h5'):
+                    self.paths_to_h5.append(file)
+
 
 if __name__ == "__main__":
     test_data = DatasetNYUv2(train=False)
