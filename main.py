@@ -19,8 +19,10 @@ import time
 
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch depth map prediction example')
-parser.add_argument('model_folder', type=str, default='trial', metavar='F',
-                     help='In which folder do you want to save the model')
+parser.add_argument('--model_folder', type=str, metavar='F',
+                    help='In which folder have you saved the models')
+parser.add_argument('--model_name', type=str, metavar='F',
+                    help='Name of the model')
 parser.add_argument('--data', type=str, default='data', metavar='D',
                      help="folder where data is located. train_data.zip and test_data.zip need to be found in the folder")
 parser.add_argument('--batch-size', type = int, default = 32, metavar = 'N',
@@ -224,7 +226,7 @@ def validate_Unet(epoch, training_loss):
             format(epoch, training_loss, validation_loss, delta1_accuracy, delta2_accuracy, delta3_accuracy, rmse_linear_loss, rmse_log_loss, 
             abs_relative_difference_loss, squared_relative_difference_loss))
 
-folder_name = "models/" + args.model_folder
+folder_name = args.model_folder + args.model_name
 if not os.path.exists(folder_name): os.mkdir(folder_name)
 
 print("********* Training the Unet Model **************")
