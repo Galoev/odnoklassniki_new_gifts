@@ -9,10 +9,10 @@ from argparse import ArgumentParser, Namespace
 
 
 class NYU2:
-    def __init__(self):
-        self.path_to_raw_nyu_archive = PATH_TO_NYU/RAW_NYU_V2_FILE_NAME
+    def __init__(self, path_to_nyu=PATH_TO_NYU, raw_nyu_archive_name = "nyudepthv2.tar.gz"):
+        self.path_to_raw_nyu_archive = path_to_nyu/raw_nyu_archive_name
         self.nyudepthv2 = RAW_NYU_V2_FILE_NAME.split(sep='.')[0]
-        self.path_to_nyu_dir = PATH_TO_NYU/self.nyudepthv2
+        self.path_to_nyu_dir = path_to_nyu/self.nyudepthv2
 
     def download(self):
         if self.__download_raw_nyu2():
@@ -84,10 +84,12 @@ class NYU2:
             
 def parse_args() -> Namespace:
     parser = ArgumentParser(description='NYUv2 downloader')
-
+    parser.add_argument('--data', type=str, default='./NYU', metavar='D',
+                     help="folder where NYUv2 is located")
     args = parser.parse_args()
     return args
 
 if __name__ == '__main__':
-    dataset = NYU2()
+    args = parse_args()
+    dataset = NYU2(path_to_nyu=Path(args.data))
     dataset.download()
