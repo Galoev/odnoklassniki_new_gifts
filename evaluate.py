@@ -13,25 +13,29 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import ImageGrid
 
 # from tiny_unet import UNet
-from model import UNet
+from unet import UNet
 import pdb
 import numpy as np
 
 parser = argparse.ArgumentParser(description='PyTorch depth prediction evaluation script')
-parser.add_argument('model_folder', type=str, metavar='F',
-                    help='In which folder have you saved the model')
+parser.add_argument('--model_folder', type=str, metavar='F',
+                    help='In which folder have you saved the models')
+parser.add_argument('--model_name', type=str, metavar='F',
+                    help='Name of the model')
 parser.add_argument('--data', type=str, default='data', metavar='D',
                     help="folder where data is located. train_data.zip and test_data.zip need to be found in the folder")
 parser.add_argument('--model_no', type=int, default = 1900, metavar='N',
                     help='Which model no to evaluate (default: 1(first model))')
 parser.add_argument('--batch-size', type = int, default = 8, metavar = 'N',
                     help='input batch size for training (default: 8)')
+parser.add_argument('--plots_folder', type = int, default = 8, metavar = 'N',
+                    help='In which folder save plots')
 
 args = parser.parse_args()
 
 from data import output_height, output_width
 
-state_dict = torch.load("models/" + args.model_folder + "/model_" + str(args.model_no) + ".pth")
+state_dict = torch.load(args.model_folder + args.model_name + "/model_" + str(args.model_no) + ".pth")
 
 model = UNet()
 model.cuda()
@@ -86,8 +90,8 @@ for batch_idx, data in enumerate(test_loader):
     # actual_output = depth[:,0,:,:].view(depth_dim[0], 1, output_height, output_width)
     F = plt.figure(1, (30, 60))
     F.subplots_adjust(left=0.05, right=0.95)
-    plot_grid(F, plot_input, output, actual_output, depth_dim[0])
-    plt.savefig("new_plots/" + args.model_folder + "_" + str(args.model_no) + "_" + str(batch_idx) + ".jpg")
+    plot_grid(F, plot_input.cpu(), output.cpu(), actual_output.cpu(), depth_dim[0])
+    plt.savefig(args.plots_folder + args.model_folder + "_" + str(args.model_no) + "_" + str(batch_idx) + ".jpg")
     plt.show()
     #batch_idx = batch_idx + 1
     #if batch_idx == 1: break
