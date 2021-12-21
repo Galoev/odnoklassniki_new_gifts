@@ -2,6 +2,7 @@ import matplotlib
 import argparse
 import os
 import PIL.Image as Image
+from pathlib import Path
 
 import torch
 from torch.autograd import Variable
@@ -12,8 +13,6 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import ImageGrid
 
-# from tiny_unet import UNet
-from unet import UNet
 import pdb
 import numpy as np
 
@@ -30,12 +29,24 @@ parser.add_argument('--batch-size', type = int, default = 8, metavar = 'N',
                     help='input batch size for training (default: 8)')
 parser.add_argument('--plots_folder', type=str, metavar='F',
                     help='In which folder save plots')
+parser.add_argument('--model_type', type=str, default='unet',
+                    help='In which folder have you saved the models')
 
 args = parser.parse_args()
 
 from data import output_height, output_width
 
 state_dict = torch.load(args.model_folder + args.model_name + "/model_" + str(args.model_no) + ".pth")
+
+if args.model_type == "unet":
+  from unet import UNet
+  print("Import unet")
+elif args.model_type == "tiny_unet":
+  from tiny_unet import UNet
+  print("Import tiny_unet")
+else:
+  print("Error. Unknown type model")
+  exit(0)
 
 model = UNet()
 model.cuda()
@@ -78,6 +89,8 @@ def plot_grid(fig, plot_input, output, actual_output, row_no):
             if(j == 2):
                 grid[i*4+j].imshow(np.transpose(actual_output[i][0].detach().cpu().numpy(), (0, 1)), interpolation="nearest")
 
+Path(args.plots_folder + args.model_name).mkdir(parents=True, exist_ok=True)
+
 for batch_idx, data in enumerate(test_loader):
     rgb, depth = torch.tensor(data['image'], requires_grad = False).cuda(), torch.tensor(data['depth'], requires_grad = False).cuda()
     # plot_input, actual_output = torch.tensor(plot_data['image'], requires_grad = False), torch.tensor(plot_data['depth'], requires_grad = False)
@@ -91,7 +104,7 @@ for batch_idx, data in enumerate(test_loader):
     F = plt.figure(1, (30, 60))
     F.subplots_adjust(left=0.05, right=0.95)
     plot_grid(F, plot_input.cpu(), output.cpu(), actual_output.cpu(), depth_dim[0])
-    plt.savefig(args.plots_folder + args.model_name + "_" + str(args.model_no) + "_" + str(batch_idx) + ".jpg")
+    plt.savefig(args.plots_folder + args.model_name + "/" + args.model_name + "_" + str(args.model_no) + "_" + str(batch_idx) + ".jpg")
     plt.show()
     #batch_idx = batch_idx + 1
     #if batch_idx == 1: break
