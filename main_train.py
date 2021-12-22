@@ -223,8 +223,8 @@ def validate_Unet(epoch, training_loss):
     with torch.no_grad():
         for idx, image in enumerate(val_loader):
             # pdb.set_trace()
-            x = image['image'].cuda()
-            y = image['depth'].cuda()
+            x = image[0].cuda()
+            y = image[1].cuda()
 
             y_hat = model(x.type(dtype))
             loss = custom_loss_function(y_hat, y)
