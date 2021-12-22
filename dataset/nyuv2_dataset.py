@@ -4,6 +4,10 @@ import numpy as np
 from pathlib import Path
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
+import torchvision.transforms as T
+
+output_height=256
+output_width=256
 
 class DatasetNYUv2(Dataset):
     PATH_TO_NYU = Path("/Volumes/TMP_Storage/Datasets/NYUv2/datasets.lids.mit.edu/_nyudepthv2")
@@ -25,6 +29,7 @@ class DatasetNYUv2(Dataset):
         self.paths_to_h5 = []
         self.__init_paths_to_h5()
         self.data_len = len(self.paths_to_h5)
+        self.resize = T.Resize((output_height, output_width)),
         # self.paths_to_data = list(self.path_to_data.glob("*.h5"))
         # self.data_len = len(self.paths_to_data)
 
@@ -36,12 +41,14 @@ class DatasetNYUv2(Dataset):
         # rgb_img = rgb_img.transpose((1, 2, 0))
         rgb_img = torch.tensor(rgb_img)
         rgb_img = rgb_img.float()
+        rgb_img = self.resize(rgb_img)
         
         depth_img = np.array(h5_data['depth'][:])
         depth_img = np.reshape(depth_img, (1, depth_img.shape[0], depth_img.shape[1]))
         depth_img = torch.tensor(depth_img)
         depth_img = depth_img.float()
         depth_img = torch.clamp(depth_img, min=0, max=1)
+        depth_img = self.resize(depth_img)
         print(f"depth_img {depth_img.shape}")
         # depth_img /= 10
         # depth_img *= 255
