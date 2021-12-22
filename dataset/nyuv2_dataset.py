@@ -29,7 +29,7 @@ class DatasetNYUv2(Dataset):
         self.paths_to_h5 = []
         self.__init_paths_to_h5()
         self.data_len = len(self.paths_to_h5)
-        self.resize = T.Resize((output_height, output_width)),
+        self.resize = T.Resize((output_height, output_width))
         # self.paths_to_data = list(self.path_to_data.glob("*.h5"))
         # self.data_len = len(self.paths_to_data)
 
