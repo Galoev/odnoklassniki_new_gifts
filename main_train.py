@@ -61,7 +61,7 @@ args = parser.parse_args()
 #                                             batch_size = args.batch_size, 
 #                                             shuffle = False, num_workers = 5)
 
-from dataset.nyuv2_dataset import DatasetNYUv2
+from dataset.nyuv2_dataset import DatasetNYUv2, output_height, output_width
 
 dataset = DatasetNYUv2(path_to_dataset=args.data)
 n_val = int(len(dataset) * args.val_percent)
@@ -195,8 +195,8 @@ def train_Unet(epoch):
     for batch_idx, image in enumerate(train_loader):
 #        start = time.time()
         # pdb.set_trace()
-        x = image['image'].cuda()
-        y = image['depth'].cuda()
+        x = image[0].cuda()
+        y = image[1].cuda()
 
         optimizer.zero_grad()
         y_hat = model(x.type(dtype))
