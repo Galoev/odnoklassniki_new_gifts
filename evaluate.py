@@ -29,7 +29,7 @@ parser.add_argument('--batch-size', type = int, default = 8, metavar = 'N',
                     help='input batch size for training (default: 8)')
 parser.add_argument('--plots_folder', type=str, metavar='F',
                     help='In which folder save plots')
-parser.add_argument('--model_type', type=str, default='unet',
+parser.add_argument('--model_type', type=str,
                     help='In which folder have you saved the models')
 
 args = parser.parse_args()

@@ -40,7 +40,7 @@ parser.add_argument('--log-interval', type=int, default=50, metavar='N',
                      help='how many batches to wait before logging training status')
 parser.add_argument('--suffix', type=str, default='', metavar='D',
                      help='suffix for the filename of models and output files')
-parser.add_argument('--model_type', type=str, default='unet',
+parser.add_argument('--model_type', type=str,
                     help='In which folder have you saved the models')
 parser.add_argument('--val_percent', type=float, default=0.2,
                      help='Percentage of dataset to use for validation 0-1')

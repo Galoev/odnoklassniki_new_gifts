@@ -17,7 +17,7 @@ parser.add_argument('--model_no', type=int, default = 1, metavar='N',
                     help='Which model no to evaluate')
 parser.add_argument('--path', type=str, default='data', metavar='D',
                     help="image file path")
-parser.add_argument('--model_type', type=str, default='unet',
+parser.add_argument('--model_type', type=str,
                     help='In which folder have you saved the models')
 args = parser.parse_args()
 
@@ -39,7 +39,7 @@ model = UNet()
 model.load_state_dict(state_dict)
 model.eval()
 
-res_folder = Path(args.path + "/output_" + args.model_name + "_" + args.model_no)
+res_folder = Path(args.path + "output_" + args.model_name + "_" + str(args.model_no))
 res_folder.mkdir(parents=True, exist_ok=True)
 
 images_path = Path(args.path)
