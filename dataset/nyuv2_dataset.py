@@ -49,7 +49,7 @@ class DatasetNYUv2(Dataset):
         depth_img = depth_img.float()
         depth_img = torch.clamp(depth_img, min=0, max=1)
         depth_img = self.resize(depth_img)
-        print(f"depth_img {depth_img.shape}")
+        
         # depth_img /= 10
         # depth_img *= 255
         
