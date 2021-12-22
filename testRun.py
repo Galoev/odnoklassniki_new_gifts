@@ -50,7 +50,7 @@ for file in tqdm(images_path.glob('*')):
     if file.is_dir():
         continue
     img = Image.open(str(file.resolve()))
-    img = img.resize((64,64))
+    img = img.resize((output_height, output_width))
     img_np = np.asarray(img)
     img_t = torch.from_numpy(img_np)
     img_t = img_t.view(1, 3, output_height, output_width)
@@ -58,4 +58,4 @@ for file in tqdm(images_path.glob('*')):
     output = model(img_t)
     output = output.detach().numpy()
     print(output.shape)
-    plt.imsave(str(res_folder) + "/" +f"output_{args.model_name}_{args.model_no}.png", np.transpose(output[0][0], (0, 1)))
+    plt.imsave(str(res_folder) + "/" +f"output_{file.stem}_{args.model_name}_{args.model_no}.png", np.transpose(output[0][0], (0, 1)))
