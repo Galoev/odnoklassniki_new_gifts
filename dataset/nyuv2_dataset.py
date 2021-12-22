@@ -5,7 +5,7 @@ from pathlib import Path
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 import torchvision.transforms as T
-from torchvision.transforms import functional.resize
+from torchvision.transforms import functional
 
 output_height=256
 output_width=256
