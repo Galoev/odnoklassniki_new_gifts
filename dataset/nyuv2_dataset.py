@@ -16,7 +16,7 @@ class DatasetNYUv2(Dataset):
         np.random.seed(seed)
         
         self.train = train 
-        self.path_to_nyu_dir = path_to_dataset
+        self.path_to_nyu_dir = Path(path_to_dataset)
 
         TRAIN_DIR_NAME = 'train'
         VAL_DIR_NAME = 'val'
