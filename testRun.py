@@ -4,6 +4,7 @@ from PIL import Image
 from pathlib import Path
 import torch
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 
 import numpy as np
@@ -42,8 +43,12 @@ model.eval()
 res_folder = Path(args.path + "output_" + args.model_name + "_" + str(args.model_no))
 res_folder.mkdir(parents=True, exist_ok=True)
 
+print(f"Image shape: output_height={output_height}; output_width={output_width}")
+
 images_path = Path(args.path)
-for file in images_path.glob('*.h5'):
+for file in tqdm(images_path.glob('*')):
+    if file.is_dir():
+        continue
     img = Image.open(str(file.resolve()))
     img = img.resize((64,64))
     img_np = np.asarray(img)
