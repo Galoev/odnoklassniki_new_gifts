@@ -48,6 +48,10 @@ def show_img_and_pred(img, depth):
     plt.imshow(pred[:, :, 0])
     plt.show()
 
+def save_pred(depth, path):
+    pred = np.transpose(depth, (1, 2, 0))
+    plt.imsave(path, pred)
+
 
 def depth_to_grayscale(depth, max_dist=10.0):
     """Transform a prediction into a grayscale 8-bit image."""
