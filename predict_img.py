@@ -25,7 +25,7 @@ def predict_img(args):
         if img_path.is_dir():
             continue
         # load image
-        img = cv2.imread(img_path)[..., ::-1]
+        img = cv2.imread(str(img_path))[..., ::-1]
         img = image_utils.scale_image(img)
         img = image_utils.center_crop(img)
         inp = image_utils.img_transform(img)
