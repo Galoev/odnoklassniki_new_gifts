@@ -49,7 +49,7 @@ def show_img_and_pred(img, depth):
     plt.show()
 
 def save_pred(depth, path):
-    pred = np.transpose(depth, (1, 2, 0))
+    pred = np.squeeze(depth)
     plt.imsave(path, pred)
 
 
